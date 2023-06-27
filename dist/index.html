@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Todo App</title>
+  </head>
+  <body>
+    <h1>Todo App</h1>
+    <input type="text" id="todo-input" placeholder="Add a new todo">
+    <button id="add-btn">Add</button>
+    <ul id="todo-list"></ul>
+
+    <script>// Get necessary DOM elements
+var todoInput = document.getElementById("todo-input");
+var addBtn = document.getElementById("add-btn");
+var todoList = document.getElementById("todo-list");
+
+// Create an array to store todos
+var todos = [];
+
+// Function to render todos
+var renderTodos = function renderTodos() {
+  // Clear the todo list
+  todoList.innerHTML = "";
+
+  // Loop through todos and create list items
+  todos.forEach(function (todo) {
+    var listItem = document.createElement("li");
+    listItem.innerHTML = "\n          <input type=\"checkbox\" ".concat(todo.completed ? "checked" : "", ">\n          <span ").concat(todo.completed ? 'style="text-decoration: line-through"' : "", ">").concat(todo.text, "</span>\n          <button class=\"delete-btn\">Delete</button>\n        ");
+
+    // Add event listener to toggle todo completion
+    listItem.querySelector('input[type="checkbox"]').addEventListener("change", function () {
+      todo.completed = !todo.completed;
+      renderTodos();
+    });
+
+    // Add event listener to delete todo
+    listItem.querySelector(".delete-btn").addEventListener("click", function () {
+      todos = todos.filter(function (t) {
+        return t !== todo;
+      });
+      renderTodos();
+    });
+
+    // Append the list item to the todo list
+    todoList.appendChild(listItem);
+  });
+};
+
+// Event listener for add button
+addBtn.addEventListener("click", function () {
+  var text = todoInput.value.trim();
+  if (text !== "") {
+    var newTodo = {
+      id: Date.now(),
+      text: text,
+      completed: false
+    };
+    todos.push(newTodo);
+    todoInput.value = "";
+    renderTodos();
+  }
+});</script>
+  </body>
+</html>
